@@ -11,6 +11,7 @@ import {
 import { CreateTeamDto } from './../dtos/create-team-dto';
 import { GetTeamDto } from './../dtos/get-team-dto';
 import { ITeamService } from './../../domain/interfaces/services/team.service.interface';
+import { CreateTeamWithPlayersDto } from '../dtos/create-team-with-players-dto';
 
 @Controller('team')
 export class TeamController {
@@ -21,6 +22,11 @@ export class TeamController {
   @Post()
   async create(@Body() team: CreateTeamDto) {
     return await this.teamService.create(team);
+  }
+
+  @Post('custom')
+  async createWithPlayers(@Body() team: CreateTeamWithPlayersDto) {
+    return await this.teamService.createWithPlayers(team);
   }
 
   @Get('/:id')

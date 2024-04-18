@@ -1,7 +1,7 @@
-import { Team } from '../../entities/team-entity';
+import { Team } from '../../entities/team.entity';
 
 export interface ITeamRepository {
-  create(team: Team): Promise<Team>;
+  create(team: Omit<Team, 'id'>): Promise<Team>;
   findAll(): Promise<Team[]>;
   findById(id: number): Promise<Team | null>;
   update(id: number, team: Team): Promise<void>;
