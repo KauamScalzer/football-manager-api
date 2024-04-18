@@ -3,20 +3,24 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateTeamDto } from './dtos/create-team-dto';
-import { TeamService } from './team.service';
-import { GetTeamDto } from './dtos/get-team-dto';
+import { CreateTeamDto } from './../dtos/create-team-dto';
+import { GetTeamDto } from './../dtos/get-team-dto';
+import { ITeamService } from './../../domain/interfaces/services/team.service.interface';
 
 @Controller('team')
 export class TeamController {
-  constructor(private readonly teamService: TeamService) {}
+  constructor(
+    @Inject(ITeamService)
+    private readonly teamService: ITeamService,
+  ) {}
   @Post()
-  async create(@Body() task: CreateTeamDto) {
-    await this.teamService.create(task);
+  async create(@Body() team: CreateTeamDto) {
+    return await this.teamService.create(team);
   }
 
   @Get('/:id')
