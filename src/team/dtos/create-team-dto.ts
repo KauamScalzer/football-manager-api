@@ -1,4 +1,4 @@
 export class CreateTeamDto {
-  name: string
-  foundation: number
+  name: string;
+  foundation: number;
 }

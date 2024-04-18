@@ -9,14 +9,26 @@ import { Repository } from 'typeorm';
 export class TeamService {
   constructor(
     @InjectRepository(TeamEntity)
-    private readonly teamRepository: Repository<TeamEntity>
-  ){}
+    private readonly teamRepository: Repository<TeamEntity>,
+  ) {}
 
   async create(team: CreateTeamDto) {
-    return await this.teamRepository.save(team)
+    return await this.teamRepository.save(team);
   }
 
   async findById(id: number): Promise<GetTeamDto | null> {
-    return await this.teamRepository.findOne({ where: { id } })
+    return await this.teamRepository.findOne({ where: { id } });
+  }
+
+  async findAll(): Promise<GetTeamDto[]> {
+    return await this.teamRepository.find();
+  }
+
+  async update(id: number, team: CreateTeamDto) {
+    return await this.teamRepository.update(id, team);
+  }
+
+  async delete(id: number) {
+    return await this.teamRepository.delete(id);
   }
 }
