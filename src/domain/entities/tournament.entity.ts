@@ -1,20 +1,20 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TournamentTeam } from './tournament-team.entity';
 
-@Entity('team')
-export class Team {
+@Entity('tournament')
+export class Tournament {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ name: 'official_name' })
-  officialName: string;
-
   @Column()
-  foundation: number;
+  year: number;
 
-  @OneToMany(() => TournamentTeam, (tournamentTeam) => tournamentTeam.team)
+  @OneToMany(
+    () => TournamentTeam,
+    (tournamentTeam) => tournamentTeam.tournament,
+  )
   tournamentTeams: TournamentTeam[];
 }

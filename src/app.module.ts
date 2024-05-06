@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PresentationModule } from './presentation/presentation.module';
 import { Team } from './domain/entities/team.entity';
+import { Tournament } from './domain/entities/tournament.entity';
+import { TournamentTeam } from './domain/entities/tournament-team.entity';
 
 @Module({
   imports: [
@@ -12,7 +14,7 @@ import { Team } from './domain/entities/team.entity';
       username: 'root',
       password: 'pwd_root',
       database: 'football_manager_db',
-      entities: [Team],
+      entities: [Team, Tournament, TournamentTeam],
       synchronize: true,
     }),
     PresentationModule,
