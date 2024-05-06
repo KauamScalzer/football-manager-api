@@ -1,17 +1,15 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
-  Post,
-  Put,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
-import { CreateTeamDto } from './../dtos/create-team-dto';
 import { GetTeamDto } from './../dtos/get-team-dto';
 import { ITeamService } from './../../domain/interfaces/services/team.service.interface';
-import { CreateTeamWithPlayersDto } from '../dtos/create-team-with-players-dto';
+import { GetAllTeamPageDto } from '../dtos/get-all-team-page-dto';
+import { GetAllPageDto } from '../dtos/get-all-page-dto';
 
 @Controller('team')
 export class TeamController {
@@ -19,33 +17,17 @@ export class TeamController {
     @Inject(ITeamService)
     private readonly teamService: ITeamService,
   ) {}
-  @Post()
-  async create(@Body() team: CreateTeamDto) {
-    return await this.teamService.create(team);
-  }
-
-  @Post('custom')
-  async createWithPlayers(@Body() team: CreateTeamWithPlayersDto) {
-    return await this.teamService.createWithPlayers(team);
-  }
 
   @Get('/:id')
   async findById(@Param('id') id: number): Promise<GetTeamDto> {
     return await this.teamService.findById(id);
   }
 
-  @Get('')
-  async findAll(): Promise<GetTeamDto[]> {
-    return await this.teamService.findAll();
-  }
-
-  @Put('/:id')
-  async update(@Param('id') id: number, @Body() team: CreateTeamDto) {
-    await this.teamService.update(id, team);
-  }
-
-  @Delete('/:id')
-  async delete(@Param('id') id: number) {
-    await this.teamService.delete(id);
+  @Get()
+  async findAll(
+    @Query(new ValidationPipe({ transform: true })) query: GetAllPageDto,
+  ): Promise<GetAllTeamPageDto> {
+    const { skip, take, search } = query;
+    return await this.teamService.findAll(skip, take, search);
   }
 }

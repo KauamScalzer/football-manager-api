@@ -1,5 +1,6 @@
-import { CreateTeamDto } from './create-team-dto';
-
-export class GetTeamDto extends CreateTeamDto {
+export class GetTeamDto {
   id: number;
+  name: string;
+  officialName: string;
+  foundation: number;
 }

@@ -1,11 +1,13 @@
+import { GetAllTeamPageDto } from 'src/presentation/dtos/get-all-team-page-dto';
 import { Team } from '../../entities/team.entity';
 
 export interface ITeamRepository {
-  create(team: Omit<Team, 'id'>): Promise<Team>;
-  findAll(): Promise<Team[]>;
+  findAll(
+    skip: number,
+    take: number,
+    search?: string,
+  ): Promise<GetAllTeamPageDto>;
   findById(id: number): Promise<Team | null>;
-  update(id: number, team: Team): Promise<void>;
-  delete(id: number): Promise<void>;
 }
 
 export const ITeamRepository = Symbol('ITeamRepository');

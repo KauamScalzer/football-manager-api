@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Team } from '../../domain/entities/team.entity';
 import { ITeamRepository } from '../../domain/interfaces/repositories/team.repository.interface';
+import { GetAllTeamPageDto } from 'src/presentation/dtos/get-all-team-page-dto';
 
 @Injectable()
 export class TeamRepository implements ITeamRepository {
@@ -10,24 +11,22 @@ export class TeamRepository implements ITeamRepository {
     @InjectRepository(Team)
     private readonly repository: Repository<Team>,
   ) {}
-
-  async create(team: Team): Promise<Team> {
-    return this.repository.save(team);
-  }
-
   async findById(id: number): Promise<Team | null> {
     return await this.repository.findOne({ where: { id } });
   }
 
-  async findAll(): Promise<Team[]> {
-    return await this.repository.find();
-  }
-
-  async update(id: number, team: Partial<Team>): Promise<void> {
-    await this.repository.update(id, team);
-  }
-
-  async delete(id: number): Promise<void> {
-    await this.repository.delete(id);
+  async findAll(
+    skip: number,
+    take: number,
+    search?: string,
+  ): Promise<GetAllTeamPageDto> {
+    skip = (skip - 1) * take;
+    const query = search ? { where: { name: Like(`%${search}%`) } } : {};
+    const [result, count] = await this.repository.findAndCount({
+      ...query,
+      take: take,
+      skip: skip,
+    });
+    return { result, count };
   }
 }
