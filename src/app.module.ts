@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PresentationModule } from './presentation/presentation.module';
-import { Team } from './domain/entities/team.entity';
-import { Tournament } from './domain/entities/tournament.entity';
-import { TournamentTeam } from './domain/entities/tournament-team.entity';
+import { TeamController } from './team/team.controller';
+import { TeamService } from './team/team.service';
+import { Team } from './db';
 
 @Module({
   imports: [
@@ -14,10 +13,12 @@ import { TournamentTeam } from './domain/entities/tournament-team.entity';
       username: 'root',
       password: 'pwd_root',
       database: 'football_manager_db',
-      entities: [Team, Tournament, TournamentTeam],
+      entities: [Team],
       synchronize: true,
     }),
-    PresentationModule,
+    TypeOrmModule.forFeature([Team]),
   ],
+  controllers: [TeamController],
+  providers: [TeamService],
 })
 export class AppModule {}
