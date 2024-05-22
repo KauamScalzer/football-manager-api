@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TeamController } from './team/team.controller';
 import { TeamService } from './team/team.service';
-import { Team } from './db';
+import { Team, User } from './db';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -13,12 +15,12 @@ import { Team } from './db';
       username: 'root',
       password: 'pwd_root',
       database: 'football_manager_db',
-      entities: [Team],
+      entities: [Team, User],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Team]),
+    TypeOrmModule.forFeature([Team, User]),
   ],
-  controllers: [TeamController],
-  providers: [TeamService],
+  controllers: [TeamController, UserController],
+  providers: [TeamService, UserService],
 })
 export class AppModule {}
