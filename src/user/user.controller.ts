@@ -15,11 +15,6 @@ export class UserController {
   @Post('login')
   @HttpCode(200)
   async login(@Body() user: SignUpUserDto) {
-    const token = await this.userService.login(user);
-    if (token) {
-      return token;
-    } else {
-      throw new Error();
-    }
+    return await this.userService.login(user);
   }
 }

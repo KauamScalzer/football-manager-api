@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './../db';
 import { Repository } from 'typeorm';
@@ -14,6 +14,12 @@ export class UserService {
   ) {}
 
   async signUp(user: SignUpUserDto): Promise<void> {
+    const userExist = await this.userRepository.findOne({
+      where: { username: user.username },
+    });
+    if (userExist) {
+      throw new HttpException('Username already exists', HttpStatus.CONFLICT);
+    }
     user.password = await bcrypt.hash(user.password, 10);
     await this.userRepository.save(user);
   }
@@ -33,5 +39,6 @@ export class UserService {
         return token;
       }
     }
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 }
