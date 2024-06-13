@@ -13,7 +13,11 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async signUp(user: SignUpUserDto): Promise<void> {
+  async updateUserTeam(id: number, teamId: number): Promise<void> {
+    await this.userRepository.update(id, { teamId: teamId });
+  }
+
+  async signUp(user: SignUpUserDto): Promise<User> {
     const userExist = await this.userRepository.findOne({
       where: { username: user.username },
     });
@@ -21,10 +25,10 @@ export class UserService {
       throw new HttpException('Username already exists', HttpStatus.CONFLICT);
     }
     user.password = await bcrypt.hash(user.password, 10);
-    await this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
 
-  async login(user: SignUpUserDto): Promise<string> {
+  async login(user: SignUpUserDto): Promise<User> {
     const userExist = await this.userRepository.findOne({
       where: { username: user.username },
     });
@@ -36,7 +40,7 @@ export class UserService {
       if (validPassword) {
         const token = await jwt.sign({ id: userExist.id }, 'abc123');
         await this.userRepository.update(userExist.id, { accessToken: token });
-        return token;
+        return userExist;
       }
     }
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);

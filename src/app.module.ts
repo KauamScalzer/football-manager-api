@@ -2,9 +2,15 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TeamController } from './team/team.controller';
 import { TeamService } from './team/team.service';
-import { Team, User } from './db';
+import { Match, Team, Tournament, TournamentTeam, User, Comment } from './db';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
+import { RoundsController } from './rounds/rounds.controller';
+import { RoundsService } from './rounds/rounds.service';
+import { TableController } from './table/table.controller';
+import { TableService } from './table/table.service';
+import { CommentController } from './comment/comment.controller';
+import { CommentService } from './comment/comment.service';
 
 @Module({
   imports: [
@@ -15,12 +21,31 @@ import { UserService } from './user/user.service';
       username: 'root',
       password: 'pwd_root',
       database: 'football_manager_db',
-      entities: [Team, User],
+      entities: [Team, User, Tournament, TournamentTeam, Match, Comment],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Team, User]),
+    TypeOrmModule.forFeature([
+      Team,
+      User,
+      Tournament,
+      TournamentTeam,
+      Match,
+      Comment,
+    ]),
   ],
-  controllers: [TeamController, UserController],
-  providers: [TeamService, UserService],
+  controllers: [
+    TeamController,
+    UserController,
+    RoundsController,
+    TableController,
+    CommentController,
+  ],
+  providers: [
+    TeamService,
+    UserService,
+    RoundsService,
+    TableService,
+    CommentService,
+  ],
 })
 export class AppModule {}
