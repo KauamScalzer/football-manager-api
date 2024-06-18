@@ -185,7 +185,7 @@ export class TableService {
         teamId,
       })
       .orderBy('match.date', 'DESC')
-      .limit(3)
+      .limit(5)
       .getMany();
 
     // Mapear os dados para o formato desejado
